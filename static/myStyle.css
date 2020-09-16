@@ -1,0 +1,18 @@
+canvas {
+    padding: 0;
+    margin: auto;
+    display: block;
+}
+
+body {
+    font-family: "Questrial", sans-serif;
+}
+
+.wide {
+    width: 100%;
+}
+
+.chart {
+    position: relative;
+    height: 60vh;
+}

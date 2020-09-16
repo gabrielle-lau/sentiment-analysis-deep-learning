@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='myStyle.css')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Questrial&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark wide"> 
+        <a class="navbar-brand ml-2" href="#"> 
+          Sentiment Analysis
+        </a> 
+    </nav> 
+    <div class="container-fluid mb-5">
+        <div class="row mt-3">
+            <div class="col-md-6 px-4">
+                <h1>
+                    Product Review Text
+                </h1>
+                <p>
+                    Please enter a product review of less than 250 words, and then click 
+                    <span class="badge badge-dark">Predict!</span> for the deep learning 
+                    model to classify it as a positive or negative review.
+                </p>
+                <form action="/predict" method="post" id="input-form">
+                    <textarea type="text" name="review" form="input-form" id="text" rows="10" class="wide">{{x}}</textarea>
+                    <div id="wc">Number of words: </div>
+                    <br/>
+                    <button type="submit" class="btn btn-dark">Predict!</button>
+                </form>
+                </br>
+            </div>
+            <div class="col-md-6 px-4">
+                <div>
+                    {% if y<2 %}
+                        <h1>
+                            Sentiment Prediction
+                        </h1>
+                        {% if y>0.5 %}
+                            <h2><span class="badge badge-success">POSITIVE</span></h2>
+                        {% else %}
+                            <h2><span class="badge badge-danger">NEGATIVE</span></h2>
+                        {% endif %}
+                        </br>
+                        <p>Probability of positive: {{y | round(2)}}</p>
+                        <p>Probability of negative: {{(1-y) | round(2)}}</p>
+                        <div class="chart">
+                            <canvas id="probChart"></canvas>
+                        </div>
+                        
+                    {% endif %}
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('probChart');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Positive', 'Negative'],
+                datasets: [{
+                    label: 'Probability',
+                    data: ["{{y | round(4)}}", "{{(1-y) | round(4)}}"],
+                    backgroundColor: [
+                        'rgba(200, 247, 197, 1)',
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(102, 204, 153, 1)',
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+            }
+        });
+    </script>
+
+    <script>
+        function wordCount(val) {
+            var w = val.match(/\S+/g);
+            return {
+                words: w ? w.length : 0
+            };
+            }
+
+        var textarea = document.getElementById('text');
+        var result = document.getElementById('wc');
+        console.log(textarea)
+        textarea.addEventListener('input', function() {
+        var wc = wordCount(this.value);
+        console.log(wc)
+        result.innerHTML = (`
+        Words: ${wc.words}
+        `);
+        });
+    </script>
