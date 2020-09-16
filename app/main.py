@@ -3,10 +3,11 @@ import tensorflow as tf
 import keras
 from keras.models import load_model
 import numpy as np
+import os
 
 app = Flask(__name__)
 
-model = load_model('export_model_v7.tf')
+model = load_model(os.path.join(os.getcwd(), 'app', 'export_model_v7.tf'))
 
 @app.route("/")
 def input_veiw():
