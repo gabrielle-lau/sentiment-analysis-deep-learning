@@ -16,5 +16,5 @@ The dataset used in this project is constructed by Xiang Zhang (xiang.zhang@nyu.
 The Amazon reviews full score dataset is constructed by randomly taking 600,000 training samples and 130,000 testing samples for each review score from 1 to 5. In total there are 3,000,000 trainig samples and 650,000 testing samples.
 
 ## Model
-The Python code for training and testing the deep learning model is written in a [Jupyter Notebook](https://github.com/gabrielle-lau/sentiment-analysis-deep-learning/blob/master/amazon-review-rating-v2.ipynb).  
+The Python code for training and testing the deep learning model is written in a [Jupyter Notebook](https://github.com/gabrielle-lau/sentiment-analysis-deep-learning/blob/master/amazon-review-rating-v2.ipynb). The test accuracy is >83%. 
 
